@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Score MAMÁ 2025 + Claves Obstétricas</title>
+<style>
+:root{--navy:#15324b;--teal:#087f8c;--bg:#f4f8fb;--card:#fff;--muted:#60758a;--line:#d7e0e8;--red:#b42318;--blue:#175cd3;--yellow:#b54708;--green:#067647}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--navy)}
+header{padding:25px 18px;background:linear-gradient(135deg,#0b6673,#168d9b);color:white}header h1{margin:0;font-size:1.55rem}header p{margin:7px 0 0;line-height:1.4}
+main{max-width:920px;margin:auto;padding:14px}.card{background:var(--card);padding:18px;border-radius:17px;margin:13px 0;box-shadow:0 3px 16px #17324d14}
+h2{font-size:1.17rem;margin:0 0 13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+label{font-size:.9rem;font-weight:700;display:block}input,select{width:100%;font-size:1rem;padding:11px;margin-top:5px;border:1px solid var(--line);border-radius:10px;background:white}
+button{border:0;border-radius:11px;padding:13px;font-size:1rem;font-weight:800;cursor:pointer}.primary{width:100%;background:var(--teal);color:white}.secondary{background:#e8f1f5;color:var(--navy)}
+.row{display:flex;gap:9px;flex-wrap:wrap}.row button{flex:1;min-width:120px}.hide{display:none}.score{font-size:3rem;font-weight:900;margin:3px 0}.pill{display:inline-block;padding:5px 9px;border-radius:99px;background:#e7f5f6;font-weight:800}
+.alert{border-left:6px solid var(--teal)}.high{border-left-color:var(--red)}.mid{border-left-color:var(--yellow)}.low{border-left-color:var(--green)}
+.breakdown{width:100%;border-collapse:collapse;margin-top:10px}.breakdown td,.breakdown th{padding:8px;border-bottom:1px solid var(--line);text-align:left;font-size:.88rem}.breakdown td:last-child{text-align:right;font-weight:800}
+.clave{border:2px solid var(--line)}.clave.red{border-color:#f1a29b}.clave.blue{border-color:#9ec5ff}.clave.yellow{border-color:#f3c77b}
+.small{font-size:.82rem;color:var(--muted);line-height:1.5}.steps{padding-left:20px;line-height:1.55}.source{background:#edf5f7;border-radius:10px;padding:11px}.how{background:#f7fafc;border:1px solid var(--line)}
+details{margin-top:9px}summary{font-weight:800;cursor:pointer}.badge3{color:var(--red);font-weight:900}
+</style>
+</head>
+<body>
+<header>
+<h1>🤰 Score MAMÁ 2025 + Claves Obstétricas</h1>
+<p>Herramienta educativa para detección temprana y respuesta inicial · Primer nivel de atención · MSP Ecuador</p>
+</header>
+<main>
+<div class="card how">
+<h2>¿Cómo usar esta aplicación?</h2>
+<ol class="steps"><li>Ingrese los 9 parámetros clínicos.</li><li>Pulse <b>CALCULAR SCORE MAMÁ</b>.</li><li>Revise el puntaje total y el aporte de cada variable.</li><li>La app muestra la periodicidad y conducta orientativa para primer nivel.</li><li>Si existe una emergencia obstétrica, consulte la clave correspondiente: Roja, Azul o Amarilla.</li></ol>
+<p class="small"><b>Importante:</b> el Score MAMÁ es complementario; no constituye una herramienta diagnóstica ni reemplaza la categorización de riesgo obstétrico.</p>
+</div>
+
+<div class="card">
+<h2>1. Ingreso de parámetros</h2>
+<div class="grid">
+<label>Temperatura axilar (°C)<input id="temp" type="number" step="0.1" value="36.5"></label>
+<label>Tensión arterial sistólica (mmHg)<input id="tas" type="number" value="120"></label>
+<label>Tensión arterial diastólica (mmHg)<input id="tad" type="number" value="80"></label>
+<label>Frecuencia cardiaca (lpm)<input id="fc" type="number" value="80"></label>
+<label>Frecuencia respiratoria (rpm)<input id="fr" type="number" value="18"></label>
+<label>Saturación de O₂ (%)<input id="spo2" type="number" value="97"></label>
+<label>Oxigenoterapia<select id="o2"><option value="0">Aire ambiente</option><option value="2">Catéter nasal</option><option value="3">Máscara o superior</option></select></label>
+<label>Nivel de consciencia<select id="conc"><option value="0">Alerta</option><option value="1">Responde a la voz</option><option value="2">Responde al dolor</option><option value="3">No responde</option></select></label>
+<label>Gasto urinario<select id="gu"><option value="0">No cuantificable (sin sonda / ambulatoria)</option><option value="2">11–30 mL/h</option><option value="3">≤10 mL/h</option><option value="0">>30 mL/h</option></select></label>
+</div>
+</div>
+
+<button class="primary" id="calc">CALCULAR SCORE MAMÁ</button>
+<div id="result" class="card alert hide" aria-live="polite"></div>
+
+<div class="card">
+<h2>2. Claves Obstétricas</h2>
+<p class="small">Seleccione la emergencia clínica identificada. La clave no se determina únicamente por el puntaje: depende del cuadro obstétrico.</p>
+<div class="row">
+<button class="secondary" data-key="roja">🔴 CLAVE ROJA</button>
+<button class="secondary" data-key="azul">🔵 CLAVE AZUL</button>
+<button class="secondary" data-key="amarilla">🟡 CLAVE AMARILLA</button>
+</div>
+<div id="clave" class="card clave hide"></div>
+</div>
+
+<div class="card">
+<h2>3. Guía rápida de las claves</h2>
+<details><summary>🔴 ¿Cuándo pensar en Clave Roja?</summary><p>Hemorragia obstétrica. El protocolo activa Clave Roja ante pérdida que cause inestabilidad hemodinámica durante embarazo, parto o puerperio; también ante pérdida acumulada &gt;1000 mL.</p></details>
+<details><summary>🔵 ¿Cuándo pensar en Clave Azul?</summary><p>Trastornos hipertensivos: hipertensión crónica con preeclampsia sobreañadida, preeclampsia sin o con signos de severidad y eclampsia, durante embarazo, parto o puerperio.</p></details>
+<details><summary>🟡 ¿Cuándo pensar en Clave Amarilla?</summary><p>Sepsis materna y/o choque séptico materno confirmado durante embarazo, parto o puerperio.</p></details>
+</div>
+
+<div class="card">
+<h2>Fuente y alcance</h2>
+<p class="source"><b>Fuente principal:</b> Ministerio de Salud Pública del Ecuador. <i>Score MAMÁ y Claves Obstétricas. Protocolo 2025.</i></p>
+<p class="small">Aplicación educativa de apoyo. No sustituye valoración clínica, protocolos institucionales, juicio profesional, tratamiento ni referencia. Ante deterioro clínico o emergencia obstétrica, priorice atención y activación del sistema de respuesta correspondiente.</p>
+</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+function sTemp(x){if(x<35)return 3;if(x<36)return 1;if(x<=37.4)return 0;if(x<=38.2)return 1;if(x<=38.9)return 2;return 3}
+function sTas(x){if(x<=70)return 3;if(x<=79)return 2;if(x<=89)return 1;if(x<=139)return 0;if(x<=149)return 1;if(x<=159)return 2;return 3}
+function sTad(x){if(x<=49)return 1;if(x<=89)return 0;if(x<=99)return 1;if(x<=109)return 2;return 3}
+function sFc(x){if(x<=40)return 3;if(x<=49)return 2;if(x<=99)return 0;if(x<=109)return 1;if(x<=129)return 2;return 3}
+function sFr(x){if(x<=10)return 3;if(x<=20)return 0;if(x<=24)return 1;if(x<=29)return 2;return 3}
+function sSp(x){if(x<=88)return 3;if(x<=90)return 2;if(x<=93)return 1;return 0}
+function val(id){return Number($(id).value)}
+$('calc').addEventListener('click',()=>{
+ let raw=[val('temp'),val('tas'),val('tad'),val('fc'),val('fr'),val('spo2')];
+ if(raw.some(x=>!Number.isFinite(x)||x<=0)){alert('Revise los valores ingresados.');return}
+ let rows=[
+ ['Temperatura',sTemp(raw[0])],['TAS',sTas(raw[1])],['TAD',sTad(raw[2])],
+ ['Frecuencia cardiaca',sFc(raw[3])],['Frecuencia respiratoria',sFr(raw[4])],
+ ['Saturación O₂',sSp(raw[5])],['Oxigenoterapia',val('o2')],['Consciencia',val('conc')],['Gasto urinario',val('gu')]
+ ];
+ let total=rows.reduce((a,r)=>a+r[1],0), any3=rows.some(r=>r[1]===3);
+ let title='',conduct='',freq='',cls='';
+ if(total===0){title='Score 0';freq='Evaluar en cada atención y según evolución.';conduct='Evaluar factores de riesgo, bienestar materno-fetal y signos de alarma.';cls='low'}
+ else if(total===1 && !any3){title='Score 1';freq='Repetir Score MAMÁ cada 4 horas y registrar.';conduct='Evaluar signos vitales, signos de alarma y factores de riesgo; realizar bienestar fetal básico y considerar exámenes/interconsulta. Si la reevaluación queda fuera del horario del establecimiento, referir a mayor capacidad resolutiva.';cls='low'}
+ else if(total>=2 && total<=4 && !any3){title='Score 2–4';freq='Repetir Score MAMÁ cada 60 minutos y registrar.';conduct='Tratar y referir según el caso. Evaluar signos de alarma, realizar diagnóstico primario y bienestar fetal básico; alistar/activar la Clave Azul, Roja o Amarilla según el cuadro y elaborar referencia al nivel de mayor capacidad resolutiva.';cls='mid'}
+ else {title='Score ≥5 o un parámetro con 3 puntos';freq='Repetir Score MAMÁ cada 30 minutos y registrar.';conduct='Tratar y referir según el caso. Evaluar signos vitales y signos de alarma, realizar bienestar fetal básico, alistar/activar la clave obstétrica correspondiente y referir acompañada por un profesional de salud.';cls='high'}
+ let r=$('result');r.className='card alert '+cls;
+ r.innerHTML=`<span class="pill">Resultado</span><div class="score">${total}</div><h2>${title}</h2>
+ <p><b>Periodicidad orientativa (primer nivel):</b> ${freq}</p><p><b>Conducta:</b> ${conduct}</p>
+ <table class="breakdown"><tr><th>Variable</th><th>Puntos</th></tr>${rows.map(x=>`<tr><td>${x[0]}</td><td class="${x[1]===3?'badge3':''}">${x[1]}</td></tr>`).join('')}</table>
+ ${any3?'<p class="badge3">⚠️ Existe al menos un parámetro con puntuación 3.</p>':''}`;
+ r.scrollIntoView({behavior:'smooth'});
+});
+const claves={
+ roja:{cls:'red',t:'🔴 CLAVE ROJA — Hemorragia obstétrica',body:'Activar ante hemorragia obstétrica con inestabilidad hemodinámica independientemente del volumen, o pérdida acumulada mayor de 1000 mL. Priorizar respuesta rápida, estabilización, tratamiento de la causa y referencia/traslado según capacidad resolutiva.'},
+ azul:{cls:'blue',t:'🔵 CLAVE AZUL — Trastornos hipertensivos',body:'Activar ante hipertensión crónica con preeclampsia sobreañadida, preeclampsia sin signos de severidad, preeclampsia con signos de severidad o eclampsia. Realizar valoración materna, signos vitales, examen físico, proteinuria, vitalidad fetal y manejo antihipertensivo/prevención de convulsiones cuando corresponda al protocolo y nivel de atención.'},
+ amarilla:{cls:'yellow',t:'🟡 CLAVE AMARILLA — Sepsis / choque séptico materno',body:'Activar ante sepsis materna y/o choque séptico materno confirmado durante embarazo, parto o puerperio. Iniciar respuesta rápida, evaluación y estabilización según protocolo y capacidad resolutiva.'}
+};
+document.querySelectorAll('[data-key]').forEach(b=>b.addEventListener('click',()=>{
+ let x=claves[b.dataset.key],d=$('clave');d.className='card clave '+x.cls;d.innerHTML=`<h2>${x.t}</h2><p>${x.body}</p><p class="small">La primera persona del personal de salud en contacto con una mujer con signos o síntomas de emergencia obstétrica puede activar la clave; el protocolo establece equipos de respuesta según disponibilidad y nivel de complejidad.</p>`;d.scrollIntoView({behavior:'smooth'});
+}));
+</script>
+</body></html>
